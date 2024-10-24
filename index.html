@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Tenses Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #logo {
+            width: 150px; /* Adjust the logo size as needed */
+            margin-bottom: 20px;
+        }
+        .sentence {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .next {
+            margin-top: 30px;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: none;
+        }
+        .next:hover {
+            background-color: #388e3c;
+        }
+        .more-lessons {
+            margin-top: 40px;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .more-lessons:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+
+<img id="logo" src="https://i.imgur.com/mwpTHJj.png" alt="Logo">
+<h1>Simple Tenses Exercise</h1>
+<p>Please select the correct tense or correct the sentence.</p>
+
+<div id="exercise-section">
+    <div class="sentence" id="sentence"></div>
+    <select id="tense-select"></select>
+    <button id="submit">Submit</button>
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<a href="#" class="next" id="next-button">Next Exercise</a>
+
+<!-- More Lessons Button -->
+<a href="https://sites.google.com/view/grades-2/home" class="more-lessons">More Lessons</a>
+
+<script>
+    const exercises = [
+        { sentence: "I eat an apple.", type: "tense", options: ["past", "present", "future"], correct: "present" },
+        { sentence: "She will play soccer.", type: "tense", options: ["past", "present", "future"], correct: "future" },
+        { sentence: "They danced at the party.", type: "tense", options: ["past", "present", "future"], correct: "past" },
+        { sentence: "He runs every day.", type: "tense", options: ["past", "present", "future"], correct: "present" },
+        { sentence: "We will go to the park.", type: "tense", options: ["past", "present", "future"], correct: "future" },
+        { sentence: "The dog barked at the mailman.", type: "tense", options: ["past", "present", "future"], correct: "past" },
+        { sentence: "I am reading a book.", type: "tense", options: ["past", "present", "future"], correct: "present" },
+        { sentence: "She will bake cookies tomorrow.", type: "tense", options: ["past", "present", "future"], correct: "future" },
+        { sentence: "They play outside.", type: "tense", options: ["past", "present", "future"], correct: "present" },
+        { sentence: "He played video games yesterday.", type: "tense", options: ["past", "present", "future"], correct: "past" },
+        { sentence: "I will visit my grandma.", type: "tense", options: ["past", "present", "future"], correct: "future" },
+        { sentence: "The cat sleeps on the mat.", type: "tense", options: ["past", "present", "future"], correct: "present" },
+        { sentence: "We watched a movie last night.", type: "tense", options: ["past", "present", "future"], correct: "past" },
+        { sentence: "I will finish my homework later.", type: "tense", options: ["past", "present", "future"], correct: "future" },
+        { sentence: "She walks to school.", type: "tense", options: ["past", "present", "future"], correct: "present" },
+        { sentence: "They were singing songs.", type: "fix", incorrect: "They singing songs.", correct: "They were singing songs." },
+        { sentence: "He is playing basketball.", type: "fix", incorrect: "He play basketball.", correct: "He is playing basketball." },
+        { sentence: "I walked to the store.", type: "fix", incorrect: "I walking to the store.", correct: "I walked to the store." },
+        { sentence: "We will eat dinner.", type: "fix", incorrect: "We eat dinner.", correct: "We will eat dinner." },
+        { sentence: "The dog was barking.", type: "fix", incorrect: "The dog barking.", correct: "The dog was barking." },
+    ];
+
+    let currentExercise = 0;
+
+    const sentenceElement = document.getElementById('sentence');
+    const tenseSelect = document.getElementById('tense-select');
+    const feedbackElement = document.getElementById('feedback');
+    const nextButton = document.getElementById('next-button');
+
+    function loadExercise() {
+        const exercise = exercises[currentExercise];
+        sentenceElement.textContent = exercise.sentence;
+
+        // Populate the dropdown with options if the exercise is a tense question
+        if (exercise.type === "tense") {
+            tenseSelect.innerHTML = '';
+            exercise.options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                tenseSelect.appendChild(optionElement);
+            });
+            tenseSelect.style.display = 'inline';
+            feedbackElement.textContent = '';
+        } else {
+            // If the exercise is to fix the tense
+            tenseSelect.innerHTML = '';
+            const optionElement = document.createElement('option');
+            optionElement.value = exercise.correct;
+            optionElement.textContent = exercise.correct;
+            tenseSelect.appendChild(optionElement);
+            tenseSelect.style.display = 'none';
+            feedbackElement.textContent = '';
+        }
+    }
+
+    document.getElementById('submit').addEventListener('click', () => {
+        const exercise = exercises[currentExercise];
+
+        if (exercise.type === "tense") {
+            const selectedTense = tenseSelect.value;
+
+            if (selectedTense === exercise.correct) {
+                feedbackElement.textContent = "Nice choice!";
+            } else {
+                feedbackElement.textContent = `Incorrect! The correct tense is "${exercise.correct}".`;
+            }
+        } else {
+            // Fixing the tense
+            feedbackElement.textContent = `The correct sentence is: "${exercise.correct}"`;
+        }
+
+        nextButton.style.display = 'block';
+    });
+
+    nextButton.addEventListener('click', () => {
+        currentExercise++;
+        if (currentExercise < exercises.length) {
+            loadExercise();
+            nextButton.style.display = 'none';
+        } else {
+            sentenceElement.textContent = "Great job! You've completed the exercises.";
+            tenseSelect.style.display = 'none';
+            nextButton.style.display = 'none';
+        }
+    });
+
+    loadExercise();
+</script>
+
+</body>
+</html>
+
+
